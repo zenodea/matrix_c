@@ -4,16 +4,22 @@
 
 int main()
 {
-  int random;
+  time_t start;
+  int random, count;
   char c;
+  start = time (NULL) + 0.1 ;
   while(1)
   {
-    random=rand() % 249;
-    c = random;
-    printf("%c",c);
+    if (time (NULL) > start)
+    {
+      random=rand() % 256;
+      c = random;
+      printf("\033[1;32m%c\033[0m\n",c);
+      count++;
+      start = start + 1;
+    }
+
 
   }
-  printf("\033[1;37mTHIS IS WHITE TEXT\033[0m\n");
-  printf("\033[1;32mTHIS IS GREEN TEXT\033[0m\n");
   return 1;
 }
