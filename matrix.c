@@ -1,13 +1,8 @@
 #include <sys/types.h>
-#include <sys/time.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
-#include <ncurses.h>
-#define COLOR_NEON_GREEN 10
-#define MAXY 45
-#define MAXX 200
-#define LINENUM 158
+#include <curses.h>
 
 struct lineInst
              {
@@ -21,43 +16,35 @@ struct lineInst
 int main()
 {
 
-  struct timeval set, new, result;
-
-  int size;
-
-  size = LINENUM;
-
-  struct lineInst lines[size];    
-
-
   int random, count, row, col;
-  int y = MAXY;
-  int x = MAXX;
-
-  bool activeline [MAXX];
-
-  WINDOW *win;
-
+  int y ;
+  int x ;
 
   // Seed random number generator
   srand(time(NULL));
 
   initscr();
-  wresize(win,y,x);
   curs_set(0);
+
+  // SIZE SETTINGS
+  getmaxyx(stdscr, y,x);
+  bool activeline [x];
+  int size = x;
+  struct lineInst lines[size];    
+
+
+  // COLOR SETTINGS
   start_color();
-
-  init_color(COLOR_NEON_GREEN, 57, 255, 20);
-
+// Enable transparency
+  assume_default_colors(-1, -1);
   // Green Color for text
-  init_pair(1, COLOR_NEON_GREEN, COLOR_BLACK);
-
+  init_pair(1, COLOR_GREEN, -1);
   // White text for front of the line of chars
-  init_pair(2, COLOR_WHITE, COLOR_BLACK);
+  init_pair(2, COLOR_WHITE, -1);
 
   // get max values
 
-  for (int i = 0; i < 200; i++)
+  for (int i = 0; i < x; i++)
   {
     activeline[i] = false;
   }
@@ -72,15 +59,8 @@ int main()
     activeline[lines[i].posx] = true;
 
     int starty;
-    if (i % 2 == 0)
-    {
-        starty = rand() % 20 + 10;
-        lines[i].len = rand() % 10 + 5;
-    }
-    else {
-        starty = rand() % 10 + 0;
-        lines[i].len = rand() % 20 + 10;
-    }
+    starty = rand() % (y-10) + 0;
+    lines[i].len = rand() % (starty/30) + 5;
     lines[i].inity = starty ; 
     lines[i].curry = starty ; 
     lines[i].len = rand() % 10 + 5;
@@ -110,8 +90,7 @@ int main()
       if (lines[i].totlen >= lines[i].len)
       {
         activeline[lines[i].posx] = false;
-        move(lines[i].inity, lines[i].posx);
-        printw(" ");
+        mvaddch(lines[i].inity, lines[i].posx,' ');
         lines[i].inity++;
       }
 
@@ -140,8 +119,7 @@ int main()
 
         // Set color of first character to WHITE
         attron(COLOR_PAIR(2));
-        move(lines[i].curry, lines[i].posx);
-        printw("%c", c);
+        mvaddch(lines[i].curry, lines[i].posx, c);
         attroff(COLOR_PAIR(2));
 
         // Update color of previous character
