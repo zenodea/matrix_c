@@ -7,6 +7,7 @@
 #define COLOR_NEON_GREEN 10
 #define MAXY 45
 #define MAXX 200
+#define LINENUM 158
 
 struct lineInst
              {
@@ -24,7 +25,7 @@ int main()
 
   int size;
 
-  size = 150;
+  size = LINENUM;
 
   struct lineInst lines[size];    
 
@@ -91,7 +92,7 @@ int main()
 
   while(1)
   {
-    usleep(50000);
+    usleep(30000);
     for (int i = 0; i < size; i++ )
       {
 
@@ -99,6 +100,10 @@ int main()
       if (lines[i].curry == y)
       {
         lines[i].finished = true;
+        attron(COLOR_PAIR(1));
+        int ch = mvinch(lines[i].curry-1, lines[i].posx) & A_CHARTEXT;
+        mvaddch(lines[i].curry-1, lines[i].posx, ch);
+        attroff(COLOR_PAIR(1));
       }
 
       // if line has reached its designated length
@@ -121,7 +126,7 @@ int main()
         activeline[lines[i].posx] = true;
         lines[i].inity = 0; 
         lines[i].curry = 0; 
-        lines[i].len = rand() % 20 + 5;
+        lines[i].len = rand() % 25 + 5;
         lines[i].totlen = 0; 
         lines[i].finished = false;
       }
