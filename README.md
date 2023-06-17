@@ -6,4 +6,4 @@ I wanted to get some practice utilising C, and after seeing a cool library in br
 The project has mainly been created using the curses.h library. 
 
 #### GIF demonstration
-![alt text]()
+![alt text](https://github.com/Hazumino/matrix_c/blob/main/assets/matrix.gif)
