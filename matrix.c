@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
-#include <curses.h>
+#include <ncurses.h>
 
 struct lineInst
              {
